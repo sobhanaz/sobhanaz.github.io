@@ -309,6 +309,8 @@ const CV_DATA = {
 
 const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[m]));
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmtDate = v => { if (!v || /^TODO/i.test(v)) return ""; if (/^\d{4}-\d{2}$/.test(v)) { const [y,m] = v.split('-'); return MON[+m-1] + ' ' + y; } return v; };
 const SEC = { Experience:'experience', 'Selected Projects':'projects', Skills:'skills' };
 
 function render(cv) {
@@ -354,7 +356,7 @@ function render(cv) {
       const card = el('div', 'card tilt reveal');
       const row = el('div', 'row');
       row.appendChild(el('div', null, '<span class="role">'+esc(e.role)+'</span> · <span class="company">'+esc(e.company)+'</span>'));
-      const d = [e.start, e.end].filter(x => x && !/^TODO/.test(x)).join(' — ') || (e.end || '');
+      const d = [fmtDate(e.start), fmtDate(e.end)].filter(Boolean).join(' — ') || fmtDate(e.end);
       row.appendChild(el('div', 'dates', esc(d)));
       card.appendChild(row);
       if (e.summary) card.appendChild(el('div', 'esum', esc(e.summary)));
