@@ -204,7 +204,10 @@
   .field input[type=text], .field input[type=email] { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--border);
     background: #0c0c15; color: var(--text); font: 400 14px var(--font); }
   .field input:focus { outline: none; border-color: var(--accent); }
-  .field.sig input { font-family: 'Space Grotesk', cursive; font-size: 17px; }
+  .field.sig input { font-family: 'Space Grotesk', cursive; font-size: 26px; padding: 16px 16px; letter-spacing: .5px; text-align: center;
+    background: repeating-linear-gradient(0deg, transparent, transparent 43px, var(--border) 43px, var(--border) 44px), #0c0c15; }
+  .field .hint { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .field input.bad { border-color: #e2555a !important; }
   .agree { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: 13px; color: var(--text); }
   .agree input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent); flex: none; }
   .nda-submit { margin-top: 18px; width: 100%; border: none; border-radius: 11px; padding: 13px; cursor: pointer;
@@ -286,11 +289,12 @@
       <form id="nda-form" novalidate>
         <div class="field"><label>Full name *</label><input type="text" id="f-name" autocomplete="name" required></div>
         <div class="field"><label>Email *</label><input type="email" id="f-email" autocomplete="email" required></div>
+        <div class="field"><label>Phone number *</label><input type="tel" id="f-phone" autocomplete="tel" inputmode="tel" placeholder="e.g. +98 912 345 6789" required><div class="hint">Include country code — I may contact you here about the proposal.</div></div>
         <div class="field"><label>Company / Organization</label><input type="text" id="f-company" autocomplete="organization"></div>
         <label class="agree"><input type="checkbox" id="f-agree" required><span>I agree to keep these materials confidential and not to copy, reproduce, or share them with anyone. *</span></label>
         <div class="field sig"><label>Type your full name as signature *</label><input type="text" id="f-sig" required></div>
         <button type="submit" class="nda-submit" id="nda-submit">Sign &amp; request full sample</button>
-        <p class="privacy">Your details are sent privately to Sobhan (via a Google form) only so he can send you the sample. They are not shared or published. A record of this signature is kept as agreement to the terms above.</p>
+        <p class="privacy">Your details are sent privately to Sobhan by email only so he can send you the sample. They are not shared or published. A record of this signature is kept as agreement to the terms above.</p>
       </form>
     </div>
     <div id="nda-done" class="nda-done" style="display:none">
@@ -628,7 +632,7 @@ const NDA_CONFIG = {
   formsubmitEmail: "sobhanazimzadeh@gmail.com",
   // OPTIONAL override: fill these to use a Google Form → Sheet instead (takes priority if set). See PROPOSAL-SETUP.md.
   action: "",
-  entries: { name: "", email: "", company: "", proposal: "", signature: "", agree: "" },
+  entries: { name: "", email: "", phone: "", company: "", proposal: "", signature: "", agree: "" },
   fallbackEmail: "sobhanazimzadeh@gmail.com"
 };
 
@@ -682,13 +686,21 @@ document.getElementById('nda-form').addEventListener('submit', e => {
   e.preventDefault();
   const name = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
+  const phoneEl = document.getElementById('f-phone'), phone = phoneEl.value.trim();
   const company = document.getElementById('f-company').value.trim();
   const sig = document.getElementById('f-sig').value.trim();
   const agree = document.getElementById('f-agree').checked;
-  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !agree || !sig) {
-    alert('Please fill your name, a valid email, sign, and tick the confidentiality box.'); return;
+  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  // Phone check: allowed chars only, 8–15 digits (E.164-ish, works internationally)
+  const digits = phone.replace(/\D/g, '');
+  const phoneOk = /^\+?[\d\s\-().]{7,20}$/.test(phone) && digits.length >= 8 && digits.length <= 15;
+  phoneEl.classList.toggle('bad', !!phone && !phoneOk);
+  if (!name || !emailOk || !phoneOk || !agree || !sig) {
+    alert(!phoneOk && phone ? 'Please enter a valid phone number with country code (8–15 digits).'
+      : 'Please fill your name, a valid email, a valid phone number, sign, and tick the confidentiality box.');
+    return;
   }
-  const data = { name, email, company, signature: sig, agree: 'Agreed',
+  const data = { name, email, phone, company, signature: sig, agree: 'Agreed',
     proposal: nda.dataset.proposal || '', date: new Date().toISOString().slice(0, 10) };
   const btn = document.getElementById('nda-submit'); btn.disabled = true; btn.textContent = 'Submitting…';
 
@@ -698,7 +710,7 @@ document.getElementById('nda-form').addEventListener('submit', e => {
   const mailtoFallback = () => {
     const body = encodeURIComponent(
       'NDA — full sample request\n\nProposal: ' + data.proposal + '\nName: ' + data.name + '\nEmail: ' + data.email +
-      '\nCompany: ' + data.company + '\nSignature: ' + data.signature + '\nAgreed to confidentiality: Yes\nDate: ' + data.date);
+      '\nPhone: ' + data.phone + '\nCompany: ' + data.company + '\nSignature: ' + data.signature + '\nAgreed to confidentiality: Yes\nDate: ' + data.date);
     window.location.href = 'mailto:' + NDA_CONFIG.fallbackEmail + '?subject=' +
       encodeURIComponent('NDA request — ' + data.proposal) + '&body=' + body;
   };
@@ -709,6 +721,7 @@ document.getElementById('nda-form').addEventListener('submit', e => {
     f.action = NDA_CONFIG.action; f.method = 'POST'; f.target = 'nda_sink'; f.style.display = 'none';
     const add = (k, v) => { if (!k) return; const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v || ''; f.appendChild(i); };
     add(NDA_CONFIG.entries.name, data.name); add(NDA_CONFIG.entries.email, data.email);
+    add(NDA_CONFIG.entries.phone, data.phone);
     add(NDA_CONFIG.entries.company, data.company); add(NDA_CONFIG.entries.proposal, data.proposal);
     add(NDA_CONFIG.entries.signature, data.signature); add(NDA_CONFIG.entries.agree, data.agree);
     document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 900);
@@ -718,7 +731,7 @@ document.getElementById('nda-form').addEventListener('submit', e => {
     f.action = 'https://formsubmit.co/' + NDA_CONFIG.formsubmitEmail; f.method = 'POST'; f.target = 'nda_sink'; f.style.display = 'none';
     const add = (k, v) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = (v == null ? '' : v); f.appendChild(i); };
     add('_subject', 'NDA signed — ' + data.proposal); add('_captcha', 'false'); add('_template', 'table');
-    add('Proposal', data.proposal); add('Name', data.name); add('Email', data.email);
+    add('Proposal', data.proposal); add('Name', data.name); add('Email', data.email); add('Phone', data.phone);
     add('Company', data.company || '—'); add('Signature', data.signature); add('Agreed', 'Yes — confidentiality'); add('Date', data.date);
     document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 1200);
   } else {
