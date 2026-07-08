@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sobhan Azimzadeh — Full-Stack Software Engineer</title>
+<meta name="description" content="Sobhan Azimzadeh — Full-Stack Software Engineer. Vue/Nuxt · Go · Flutter · DevOps. 5+ years building production web & mobile apps. Open to remote roles worldwide." />
+<meta property="og:title" content="Sobhan Azimzadeh — Full-Stack Software Engineer" />
+<meta property="og:description" content="Vue/Nuxt · Go · Flutter · DevOps. Open to remote roles worldwide." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #9333ea;
+    --accent2: #22d3ee;
+    --accent3: #f472b6;
+    --bg: #05050b;
+    --bg-2: #0a0a14;
+    --bg-card: #101019;
+    --bg-card-2: #15151f;
+    --text: #eef0fb;
+    --text-dim: #969ab5;
+    --border: #222337;
+    --radius: 18px;
+    --font: 'Inter', 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --display: 'Space Grotesk', 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  ::selection { background: color-mix(in srgb, var(--accent) 55%, transparent); color: #fff; }
+
+  /* ---------- Fixed background layers ---------- */
+  #space { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; }
+  .orb.a { width: 46vw; height: 46vw; left: -10vw; top: -12vw; background: radial-gradient(circle, var(--accent), transparent 62%); animation: float1 22s ease-in-out infinite; }
+  .orb.b { width: 40vw; height: 40vw; right: -12vw; top: 6vw; background: radial-gradient(circle, var(--accent2), transparent 62%); opacity:.32; animation: float2 26s ease-in-out infinite; }
+  .orb.c { width: 34vw; height: 34vw; left: 30vw; top: 60vh; background: radial-gradient(circle, var(--accent3), transparent 62%); opacity:.22; animation: float1 30s ease-in-out infinite reverse; }
+  @keyframes float1 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(4vw,4vh) scale(1.08);} }
+  @keyframes float2 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(-5vw,3vh) scale(1.12);} }
+  .grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* ---------- Nav + scroll progress ---------- */
+  #prog { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 50;
+    background: linear-gradient(90deg, var(--accent), var(--accent2)); box-shadow: 0 0 12px var(--accent2); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 26px; backdrop-filter: blur(12px); background: color-mix(in srgb, var(--bg) 62%, transparent);
+    border-bottom: 1px solid transparent; transition: border-color .3s, background .3s; }
+  nav.stuck { border-color: var(--border); background: color-mix(in srgb, var(--bg) 84%, transparent); }
+  nav .brand { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; font-size: 16px; }
+  nav .brand b { color: var(--accent2); }
+  nav .links { display: flex; align-items: center; gap: 22px; }
+  nav .links a { text-decoration: none; color: var(--text-dim); font-size: 14px; font-weight: 500; transition: color .2s; }
+  nav .links a:hover { color: var(--text); }
+  nav .cta { padding: 8px 15px; border-radius: 999px; border: 1px solid var(--accent); color: var(--text) !important;
+    background: color-mix(in srgb, var(--accent) 18%, transparent); }
+  nav .cta:hover { background: color-mix(in srgb, var(--accent) 32%, transparent); }
+  @media (max-width: 680px) { nav .links a:not(.cta) { display: none; } }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px 96px; position: relative; z-index: 3; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 150px 0 56px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--accent2); font-weight: 600; margin-bottom: 22px;
+    padding: 7px 15px; border: 1px solid var(--border); border-radius: 999px; background: rgba(16,16,25,.6); }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: #34d17a; box-shadow: 0 0 0 0 #34d17a; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%{ box-shadow: 0 0 0 0 rgba(52,209,122,.6);} 70%{ box-shadow: 0 0 0 8px rgba(52,209,122,0);} 100%{ box-shadow:0 0 0 0 rgba(52,209,122,0);} }
+  h1 { font-family: var(--display); font-size: clamp(44px, 8.5vw, 88px); font-weight: 700; letter-spacing: -.03em; line-height: .96;
+    background: linear-gradient(100deg, #fff 0%, var(--accent2) 42%, var(--accent) 72%, var(--accent3) 100%);
+    background-size: 260% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 8s linear infinite; }
+  @keyframes shimmer { to { background-position: 260% center; } }
+  .title { font-family: var(--display); font-size: clamp(17px, 2.8vw, 25px); color: var(--text); opacity: .84; font-weight: 500; margin-top: 18px; }
+  .summary { max-width: 680px; margin-top: 20px; color: var(--text); opacity: .8; font-size: 16.5px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-size: 14.5px; font-weight: 600;
+    text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, border-color .2s; border: 1px solid var(--border); }
+  .btn.primary { background: linear-gradient(100deg, var(--accent), var(--accent2)); color: #fff; border: none; box-shadow: 0 8px 26px -8px var(--accent); }
+  .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -8px var(--accent); }
+  .btn.ghost { background: rgba(16,16,25,.6); color: var(--text); }
+  .btn.ghost:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .contact { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .chip { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 999px;
+    background: rgba(16,16,25,.7); border: 1px solid var(--border); color: var(--text); font-size: 13.5px;
+    text-decoration: none; transition: border-color .2s, transform .2s, background .2s; }
+  .chip:hover { border-color: var(--accent); transform: translateY(-2px); background: rgba(28,22,48,.8); }
+  .chip b { color: var(--accent2); font-weight: 600; }
+
+  /* ---------- Sections ---------- */
+  section { margin-top: 66px; scroll-margin-top: 80px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; }
+  .sec-head h2 { font-family: var(--display); font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent2); font-weight: 600; }
+  .sec-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+  .card { position: relative; background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 26px; margin-bottom: 14px;
+    transform-style: preserve-3d; will-change: transform; transition: border-color .25s, box-shadow .25s; }
+  .card::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); opacity: 0; transition: opacity .3s;
+    background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--accent2) 20%, transparent), transparent 44%);
+    pointer-events: none; }
+  .tilt:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); box-shadow: 0 20px 50px -24px rgba(0,0,0,.8); }
+  .tilt:hover::after { opacity: 1; }
+  .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: baseline; }
+  .role { font-size: 18px; font-weight: 700; }
+  .company { color: var(--accent2); font-weight: 600; }
+  .dates { color: var(--text-dim); font-size: 13.5px; white-space: nowrap; }
+  .esum { color: var(--text); opacity: .76; margin-top: 8px; font-size: 15px; }
+  .bullets { margin: 14px 0 0 0; padding-left: 18px; color: var(--text); opacity: .88; }
+  .bullets li { margin: 6px 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .proj { display: flex; flex-direction: column; height: 100%; }
+  .proj.feat { grid-column: span 2; }
+  .proj-top { display: flex; align-items: center; gap: 10px; }
+  .proj h3 { font-family: var(--display); font-size: 17px; font-weight: 600; }
+  .star { font-size: 10.5px; color: #0a0a12; background: linear-gradient(90deg, var(--accent2), var(--accent)); padding: 2px 9px; border-radius: 999px; font-weight: 700; letter-spacing: .05em; }
+  .proj p { color: var(--text-dim); font-size: 14.5px; margin-top: 10px; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag { font-size: 12px; padding: 4px 10px; border-radius: 7px; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--text); border: 1px solid var(--border); }
+  .proj a.view { color: var(--accent2); font-size: 13.5px; text-decoration: none; margin-top: 14px; font-weight: 600; align-self: flex-start; }
+  .proj a.view:hover { text-decoration: underline; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+  .skill-cat h3 { font-family: var(--display); font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--text-dim); margin-bottom: 14px; }
+  .skill { margin-bottom: 11px; }
+  .skill .lab { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; }
+  .bar { height: 6px; border-radius: 999px; background: #0c0c16; overflow: hidden; border: 1px solid var(--border); }
+  .bar > span { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1.1s cubic-bezier(.2,.8,.2,1); }
+
+  .highlights { display: grid; gap: 10px; }
+  .highlights li { list-style: none; padding-left: 26px; position: relative; color: var(--text); opacity: .9; }
+  .highlights li::before { content: "▹"; position: absolute; left: 4px; color: var(--accent2); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mini h3.mh { font-family: var(--display); font-size: 15px; font-weight: 600; margin-bottom: 10px; color: var(--accent2); }
+  .mini .deg { font-size: 15.5px; font-weight: 600; }
+  .mini .inst { color: var(--text-dim); font-size: 14px; }
+  .lang-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+  .lang-row span:last-child { color: var(--text-dim); }
+
+  footer { margin-top: 76px; text-align: center; color: var(--text-dim); font-size: 13px; }
+  footer a { color: var(--accent2); text-decoration: none; }
+
+  /* ---------- Motion ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .rise { opacity: 0; transform: translateY(20px); animation: rise .8s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .rise { opacity: 1 !important; transform: none !important; animation: none !important; }
+    #space, .orb { display: none; } h1 { animation: none; }
+  }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } .proj.feat { grid-column: span 1; } .hero { padding-top: 118px; } }
+
+  /* ---------- Print / PDF (clean A4) ---------- */
+  @media print {
+    @page { size: A4; margin: 13mm; }
+    :root { --bg:#fff; --bg-2:#fff; --bg-card:#fff; --bg-card-2:#fff; --text:#14141f; --text-dim:#555; --border:#dcdce6; }
+    body { background:#fff !important; overflow: visible; }
+    #space, .orbs, .grain, nav, #prog, .cta-row { display:none !important; }
+    .wrap { max-width: 100%; padding: 0; }
+    .hero { padding: 0 0 10px; }
+    .eyebrow { background:none; border-color:#ccc; color:#5a2bd0; }
+    h1 { -webkit-text-fill-color:#14141f; background:none; color:#14141f; font-size: 32px; animation:none; }
+    .title { font-size: 15px; opacity: 1; }
+    .summary { font-size: 12.5px; max-width: 100%; }
+    .chip { background:none; border-color:#ccc; padding: 4px 9px; font-size: 11.5px; }
+    section { margin-top: 18px; }
+    .card { break-inside: avoid; box-shadow:none; margin-bottom: 9px; padding: 12px 14px; }
+    .card::after { display:none; }
+    .proj.feat { grid-column: span 1; }
+    .bar > span { width: var(--pct, 0%) !important; background: #6a2bd0 !important; }
+    a { color:#5a2bd0 !important; }
+    footer { display:none; }
+  }
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<canvas id="space"></canvas>
+<div class="orbs" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="nav">
+  <div class="brand">Sobhan<b>.</b></div>
+  <div class="links">
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="https://github.com/sobhanaz" target="_blank" rel="noopener">GitHub</a>
+    <a class="cta" href="./Sobhan-Azimzadeh-CV.pdf" download>Download CV</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow rise" id="eyebrow" style="animation-delay:.05s"></span>
+    <h1 class="rise" id="name" style="animation-delay:.12s"></h1>
+    <div class="title rise" id="title" style="animation-delay:.22s"></div>
+    <p class="summary rise" id="summary" style="animation-delay:.32s"></p>
+    <div class="cta-row rise" id="ctarow" style="animation-delay:.42s">
+      <a class="btn primary" href="./Sobhan-Azimzadeh-CV.pdf" download>↓ Download CV (PDF)</a>
+      <a class="btn ghost" href="https://github.com/sobhanaz" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/sobhan-azimzadeh/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="contact rise" id="contact" style="animation-delay:.5s"></div>
+  </header>
+  <main id="main"></main>
+  <footer class="reveal">Designed &amp; built by Sobhan Azimzadeh · <a href="https://github.com/sobhanaz" target="_blank" rel="noopener">github.com/sobhanaz</a></footer>
+</div>
+
+<script>
+/* ===== CV DATA — mirrors sobhan-cv.json (edit the JSON, then re-sync this block) ===== */
+const CV_DATA = {
+  "basics": {
+    "name": "Sobhan Azimzadeh",
+    "title": "Full-Stack Software Engineer · Vue / Nuxt · Go · Flutter · DevOps",
+    "summary": "Full-stack software engineer and technical founder with 5+ years shipping production web and mobile apps end-to-end — Vue/Nuxt and Flutter front-ends, Go/Python/PHP back-ends, PostgreSQL & Redis, and the DevOps (Docker, Kubernetes, CI/CD) to run them. CEO of TECSO; I've also architected resilient network infrastructure for humanitarian disaster response at the Red Crescent, and I combine deep engineering with business strategy and UI/UX. Open to remote roles worldwide.",
+    "location": "Remote (Worldwide) · Iran / UAE",
+    "email": "sobhanazimzadeh@gmail.com",
+    "phone": "+98 905 843 2452",
+    "website": "",
+    "profiles": [
+      { "network": "GitHub", "username": "sobhanaz", "url": "https://github.com/sobhanaz" },
+      { "network": "LinkedIn", "username": "sobhan-azimzadeh", "url": "https://www.linkedin.com/in/sobhan-azimzadeh/" }
+    ]
+  },
+  "highlights": [
+    "5+ years as a full-stack engineer and technical founder (CEO of TECSO).",
+    "Built a full production e-commerce platform end-to-end — Nuxt 3 + Go + PostgreSQL + Redis, with phone-OTP auth, cart, checkout and CI/CD.",
+    "Architected resilient, multi-branch network infrastructure (Cisco, MikroTik, Juniper, HP servers) for humanitarian disaster response at the Red Crescent Society.",
+    "Proposal & business-strategy specialist — data-driven, design-led B2B proposals that win contracts.",
+    "30+ open-source projects; bilingual FA/EN, RTL & i18n specialist."
+  ],
+  "experience": [
+    { "role": "Chief Executive Officer & Full-Stack Engineer", "company": "TECSO (Tecso Team)", "location": "Urmia, Iran · Remote", "start": "2021-05", "end": "Present",
+      "summary": "Founded and lead a software studio delivering production web and mobile products for the Iranian market and diaspora.",
+      "bullets": [
+        "Architect and ship full-stack apps: Nuxt 3 / Vue 3 front-ends, Go / Python / PHP back-ends, PostgreSQL, MySQL and Redis.",
+        "Own DevOps end-to-end: Docker, Linux, Nginx, CI/CD (GitHub Actions), Cloudflare and automated SSL.",
+        "Lead a cross-functional team (design, backend, delivery) from proposal through launch and support.",
+        "Delivered Persian-native, RTL/i18n products including a full e-commerce platform and an AI-employee platform."
+      ] },
+    { "role": "Assistant to the Head of IT & Communications", "company": "Red Crescent Society of West Azerbaijan Province", "location": "Urmia, Iran · On-site", "start": "2024-05", "end": "2025-05",
+      "summary": "Supported design and delivery of resilient IT & network infrastructure for humanitarian and disaster-response operations across regional branches.",
+      "bullets": [
+        "Designed and deployed standardized network infrastructure across multiple districts (Cisco, MikroTik, Juniper).",
+        "Managed HP ProLiant servers and Juniper firewalls; supported system testing, deployment and documentation.",
+        "Built emergency networking solutions to improve operational readiness during disaster situations.",
+        "Mentored networking interns and supported cross-functional teams on mission-critical IT projects."
+      ] },
+    { "role": "Chief Operating Officer & Head of Design/Programming", "company": "Saxtiran Platform", "location": "Urmia, Iran · Hybrid", "start": "2022-10", "end": "2024-07",
+      "summary": "Led the full platform lifecycle — from architecture to launch and growth — across design, web, and mobile.",
+      "bullets": [
+        "Directed cross-functional teams and defined operational workflows, sprint cycles and delivery timelines.",
+        "Architected a scalable backbone: Go microservices, Vue.js front-end, Flutter mobile, REST & GraphQL APIs.",
+        "Implemented CI/CD, Docker and Kubernetes; added monitoring (Prometheus, Grafana) and cloud backups.",
+        "Introduced AI chatbots and virtual-tour integration to boost engagement and platform efficiency."
+      ] },
+    { "role": "Full-Stack Web Developer (Freelance)", "company": "Independent / Global", "location": "Remote", "start": "2020-01", "end": "2025-04",
+      "summary": "Built scalable web and mobile applications for international clients across backend, frontend, mobile and cloud.",
+      "bullets": [
+        "Backend in Go — secure, scalable REST & GraphQL APIs with PostgreSQL, MongoDB, Redis and Kafka.",
+        "Frontend in Vue.js (Pinia/Vuex) and cross-platform mobile apps in Flutter.",
+        "DevOps & cloud: Docker, Kubernetes, CI/CD (GitHub Actions / Jenkins), AWS / GCP.",
+        "UI/UX design — wireframes and prototypes in Figma and Adobe XD."
+      ] },
+    { "role": "Professional Proposal Maker & Business Strategy Consultant (Freelance)", "company": "Independent", "location": "Urmia, Iran · Remote", "start": "2021-03", "end": "2025-05",
+      "summary": "Created strategy-driven, design-led B2B proposals combining business analysis, market research and UI/UX.",
+      "bullets": [
+        "Led end-to-end proposal development: needs analysis, objectives, value propositions, timelines and budgets.",
+        "Ran SWOT and competitive research to sharpen market positioning and win contracts.",
+        "Designed visually impactful, on-brand proposals with wireframes/prototypes in Figma and Adobe XD."
+      ] }
+  ],
+  "projects": [
+    { "name": "Digikala Clone — Full-Stack E-commerce", "description": "From-scratch rebuild of Iran's largest online store: FA/RTL storefront, phone-OTP auth (JWT + refresh), cart and checkout with server-side price snapshots, live search. Go API (chi) with injection-safe SQL, Postgres + Redis, Docker Compose, CI/CD to a live demo.", "tech": ["Nuxt 3","Go","PostgreSQL","Redis","Docker","CI/CD"], "url": "https://github.com/sobhanaz/digikala-clone", "highlight": true },
+    { "name": "Noxioai — AI-Employee Platform", "description": "Bilingual (FA/EN, RTL) platform where businesses run marketing, support and dev from one visual office of AI 'employees'. Nuxt 3 SSG, i18n, Tailwind, motion; Go + Postgres + pgvector backend in progress.", "tech": ["Nuxt 3","Vue 3","i18n / RTL","Tailwind","Go"], "url": "https://github.com/Tecso-Dev/Noxioai", "highlight": true },
+    { "name": "TeCSO QR", "description": "Installable PWA QR-code generator with live preview, theming, logo embedding and multi-format export.", "tech": ["React","TypeScript","Vite","PWA"], "url": "https://github.com/sobhanaz/tecsoqr", "highlight": false },
+    { "name": "Advanced SEO Metrics Analyzer", "description": "Manifest-V3 Chrome extension auditing on-page, technical, content and off-page SEO with Core Web Vitals and PDF/JSON/CSV export.", "tech": ["React","Tailwind","Chrome Extension"], "url": "https://github.com/sobhanaz/Advanced-SEO-Metrics-Analyzer", "highlight": false },
+    { "name": "alpha-ssl", "description": "Enterprise SSL certificate automation for Let's Encrypt — multi-domain, panel integration, zero-downtime deployment.", "tech": ["Bash","ACME","Let's Encrypt"], "url": "https://github.com/sobhanaz/alpha-ssl-master", "highlight": false },
+    { "name": "Go — From Beginner to Pro", "description": "Self-paced 20-session Go course (EN + FA) plus two production-style portfolio projects (a REST API and a CLI), fully tested on Go 1.25.", "tech": ["Go","REST","CLI","Testing"], "url": "https://github.com/sobhanaz/go-from-beginner-to-pro", "highlight": false }
+  ],
+  "skills": [
+    { "category": "Frontend", "items": [ {"name":"Vue / Nuxt 3","level":5},{"name":"JavaScript (ES6+)","level":5},{"name":"HTML / CSS / SCSS","level":5},{"name":"TypeScript","level":4},{"name":"Tailwind CSS","level":4},{"name":"React","level":3} ] },
+    { "category": "Backend & APIs", "items": [ {"name":"Go","level":4},{"name":"Python","level":4},{"name":"PHP / Laravel","level":4},{"name":"REST & GraphQL","level":4},{"name":"Node.js","level":3} ] },
+    { "category": "Mobile, Data & Cloud", "items": [ {"name":"Flutter","level":3},{"name":"PostgreSQL","level":4},{"name":"Redis","level":4},{"name":"MongoDB","level":3},{"name":"AWS / GCP","level":3} ] },
+    { "category": "DevOps & Networking", "items": [ {"name":"Docker","level":4},{"name":"Linux / Shell","level":5},{"name":"CI/CD (GitHub Actions)","level":4},{"name":"Kubernetes","level":3},{"name":"Cisco / MikroTik / Juniper","level":3} ] },
+    { "category": "Design & Strategy", "items": [ {"name":"Figma / Adobe XD","level":4},{"name":"UI / UX","level":4},{"name":"Proposal & Business Strategy","level":5},{"name":"SEO","level":4} ] }
+  ],
+  "education": [ { "degree": "TODO — add degree & field", "institution": "University of Tabriz", "start": "", "end": "", "note": "Add degree, field of study and years." } ],
+  "languages": [ {"language":"Persian (Farsi)","fluency":"Native"}, {"language":"English","fluency":"Professional working"} ],
+  "theme": { "accent": "#9333ea", "accent2": "#22d3ee", "mode": "dark" }
+};
+/* ===== end data ===== */
+
+const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[m]));
+const SEC = { Experience:'experience', 'Selected Projects':'projects', Skills:'skills' };
+
+function render(cv) {
+  if (cv.theme) {
+    if (cv.theme.accent) document.documentElement.style.setProperty('--accent', cv.theme.accent);
+    if (cv.theme.accent2) document.documentElement.style.setProperty('--accent2', cv.theme.accent2);
+  }
+  const b = cv.basics || {};
+  document.title = (b.name || 'CV') + ' — ' + (b.title || 'CV');
+  document.getElementById('eyebrow').innerHTML = (b.location ? '<span class="dot"></span> ' + esc(b.location) : 'Curriculum Vitae');
+  document.getElementById('name').textContent = b.name || '';
+  document.getElementById('title').textContent = b.title || '';
+  document.getElementById('summary').textContent = b.summary || '';
+
+  const c = document.getElementById('contact');
+  const chip = (label, val, href) => {
+    const n = el(href ? 'a' : 'span', 'chip', (label ? '<b>'+esc(label)+'</b> ' : '') + esc(val));
+    if (href) { n.href = href; n.target = '_blank'; n.rel = 'noopener'; }
+    return n;
+  };
+  if (b.email) c.appendChild(chip('', b.email, 'mailto:' + b.email));
+  if (b.phone) c.appendChild(chip('', b.phone, 'tel:' + b.phone.replace(/\s/g,'')));
+  if (b.location) c.appendChild(chip('', b.location));
+
+  const main = document.getElementById('main');
+  const section = (name, node) => {
+    const s = el('section', 'reveal'); if (SEC[name]) s.id = SEC[name];
+    const h = el('div', 'sec-head');
+    h.appendChild(el('h2', null, esc(name)));
+    h.appendChild(el('div', 'rule'));
+    s.appendChild(h); s.appendChild(node); main.appendChild(s);
+  };
+
+  if (cv.highlights && cv.highlights.length) {
+    const ul = el('ul', 'highlights card tilt');
+    cv.highlights.forEach(x => ul.appendChild(el('li', null, esc(x))));
+    section('Highlights', ul);
+  }
+
+  if (cv.experience && cv.experience.length) {
+    const box = el('div');
+    cv.experience.forEach(e => {
+      const card = el('div', 'card tilt reveal');
+      const row = el('div', 'row');
+      row.appendChild(el('div', null, '<span class="role">'+esc(e.role)+'</span> · <span class="company">'+esc(e.company)+'</span>'));
+      const d = [e.start, e.end].filter(x => x && !/^TODO/.test(x)).join(' — ') || (e.end || '');
+      row.appendChild(el('div', 'dates', esc(d)));
+      card.appendChild(row);
+      if (e.summary) card.appendChild(el('div', 'esum', esc(e.summary)));
+      if (e.bullets && e.bullets.length) {
+        const ul = el('ul', 'bullets');
+        e.bullets.forEach(x => ul.appendChild(el('li', null, esc(x))));
+        card.appendChild(ul);
+      }
+      box.appendChild(card);
+    });
+    section('Experience', box);
+  }
+
+  if (cv.projects && cv.projects.length) {
+    const grid = el('div', 'grid');
+    cv.projects.forEach(p => {
+      const card = el('div', 'card proj tilt reveal' + (p.highlight ? ' feat' : ''));
+      const top = el('div', 'proj-top');
+      top.appendChild(el('h3', null, esc(p.name)));
+      if (p.highlight) top.appendChild(el('span', 'star', 'FEATURED'));
+      card.appendChild(top);
+      if (p.description) card.appendChild(el('p', null, esc(p.description)));
+      if (p.tech && p.tech.length) {
+        const t = el('div', 'tags');
+        p.tech.forEach(x => t.appendChild(el('span', 'tag', esc(x))));
+        card.appendChild(t);
+      }
+      if (p.url) { const a = el('a', 'view', 'View project →'); a.href = p.url; a.target='_blank'; a.rel='noopener'; card.appendChild(a); }
+      grid.appendChild(card);
+    });
+    section('Selected Projects', grid);
+  }
+
+  if (cv.skills && cv.skills.length) {
+    const g = el('div', 'skills-grid');
+    cv.skills.forEach(cat => {
+      const col = el('div', 'skill-cat card tilt');
+      col.appendChild(el('h3', null, esc(cat.category)));
+      (cat.items || []).forEach(it => {
+        const s = el('div', 'skill');
+        s.appendChild(el('div', 'lab', '<span>'+esc(it.name)+'</span>'));
+        if (it.level) {
+          const bar = el('div', 'bar');
+          const span = el('span');
+          const pct = (it.level/5*100) + '%';
+          span.style.setProperty('--pct', pct);
+          span.dataset.pct = pct;
+          bar.appendChild(span); s.appendChild(bar);
+        }
+        col.appendChild(s);
+      });
+      g.appendChild(col);
+    });
+    section('Skills', g);
+  }
+
+  const eduHas = cv.education && cv.education.some(e => e.institution);
+  const langHas = cv.languages && cv.languages.length;
+  if (eduHas || langHas) {
+    const two = el('div', 'two-col');
+    const edu = el('div', 'card tilt mini');
+    edu.appendChild(el('h3', 'mh', 'Education'));
+    (cv.education || []).forEach(e => {
+      const yrs = [e.start, e.end].filter(Boolean).join('–');
+      edu.appendChild(el('div', null, '<div class="deg">'+esc(e.degree)+'</div><div class="inst">'+esc([e.institution, yrs].filter(Boolean).join(' · '))+'</div>'));
+    });
+    const lang = el('div', 'card tilt mini');
+    lang.appendChild(el('h3', 'mh', 'Languages'));
+    (cv.languages || []).forEach(l => lang.appendChild(el('div', 'lang-row', '<span>'+esc(l.language)+'</span><span>'+esc(l.fluency||'')+'</span>')));
+    two.appendChild(edu); two.appendChild(lang);
+    section('Background', two);
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        en.target.querySelectorAll('.bar > span').forEach(sp => sp.style.width = sp.dataset.pct || '0%');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((n, i) => { n.style.transitionDelay = Math.min(i * 45, 260) + 'ms'; io.observe(n); });
+
+  initTilt();
+}
+
+/* ---------- 3D pointer tilt + glare ---------- */
+function initTilt() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const MAX = 7;
+  document.querySelectorAll('.tilt').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      card.style.transform = `perspective(900px) rotateY(${(px-0.5)*MAX}deg) rotateX(${-(py-0.5)*MAX}deg) translateY(-3px)`;
+      card.style.setProperty('--mx', (px*100)+'%');
+      card.style.setProperty('--my', (py*100)+'%');
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+}
+
+/* ---------- nav shrink + scroll progress ---------- */
+(function scrollUI(){
+  const nav = document.getElementById('nav'), prog = document.getElementById('prog');
+  const onScroll = () => {
+    const y = window.scrollY || 0;
+    nav.classList.toggle('stuck', y > 20);
+    const h = document.documentElement.scrollHeight - innerHeight;
+    prog.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+/* ---------- 3D depth constellation ---------- */
+(function space() {
+  const cv = document.getElementById('space');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = cv.getContext('2d');
+  let W, H, DPR, stars = [], mx = 0, my = 0, raf;
+  const A = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#9333ea';
+  const A2 = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim() || '#22d3ee';
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * DPR; H = cv.height = innerHeight * DPR;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    const count = Math.min(130, Math.floor(innerWidth * innerHeight / 13000));
+    stars = Array.from({ length: count }, () => ({
+      x: (Math.random() - 0.5) * W, y: (Math.random() - 0.5) * H,
+      z: Math.random() * W, o: 0.3 + Math.random() * 0.7, c: Math.random() > 0.5 ? A2 : A
+    }));
+  }
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save(); ctx.translate(W / 2 + mx * 26 * DPR, H / 2 + my * 26 * DPR);
+    const pts = [];
+    for (const s of stars) {
+      s.z -= 1.05;
+      if (s.z < 1) { s.z = W; s.x = (Math.random() - 0.5) * W; s.y = (Math.random() - 0.5) * H; }
+      const k = 128 / s.z, x = s.x * k, y = s.y * k, r = Math.max(0.4, (1 - s.z / W) * 2.4) * DPR;
+      const a = s.o * (1 - s.z / W);
+      ctx.globalAlpha = a; ctx.fillStyle = s.c;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      if (a > 0.35) pts.push([x, y, a]);
+    }
+    // faint connecting lines for constellation feel
+    ctx.strokeStyle = A2; ctx.lineWidth = DPR * 0.5;
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[i][0] - pts[j][0], dy = pts[i][1] - pts[j][1], d2 = dx*dx + dy*dy;
+        if (d2 < (140 * DPR) ** 2) {
+          ctx.globalAlpha = (1 - Math.sqrt(d2) / (140 * DPR)) * 0.12 * Math.min(pts[i][2], pts[j][2]);
+          ctx.beginPath(); ctx.moveTo(pts[i][0], pts[i][1]); ctx.lineTo(pts[j][0], pts[j][1]); ctx.stroke();
+        }
+      }
+    }
+    ctx.restore(); ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(tick);
+  }
+  addEventListener('resize', resize, { passive: true });
+  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; }, { passive: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else tick(); });
+  resize(); tick();
+})();
+
+render(CV_DATA);
+</script>
+</body>
+</html>
