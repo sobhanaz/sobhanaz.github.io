@@ -167,7 +167,17 @@
 
   /* ---------- Proposals rail ---------- */
   .prop-lead { color: var(--text-dim); font-size: 15px; margin: -8px 0 18px; max-width: 720px; }
-  .rail { display: flex; gap: 16px; overflow-x: auto; padding: 6px 4px 18px; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+  .rail-wrap { position: relative; }
+  .rail { display: flex; gap: 16px; overflow-x: auto; padding: 6px 4px 18px; scroll-snap-type: x proximity; scroll-behavior: smooth;
+    overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+  .rail-btn { position: absolute; top: 42%; transform: translateY(-50%); z-index: 5; width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font: 700 22px var(--font); color: var(--text);
+    background: color-mix(in srgb, var(--bg-card) 88%, transparent); border: 1px solid var(--border); backdrop-filter: blur(8px);
+    transition: background .2s, border-color .2s, opacity .2s; }
+  .rail-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .rail-btn.prev { left: -8px; } .rail-btn.next { right: -8px; }
+  .rail-btn[disabled] { opacity: 0; pointer-events: none; }
+  @media (max-width: 680px) { .rail-btn { display: none; } }
   .rail::-webkit-scrollbar { height: 8px; }
   .rail::-webkit-scrollbar-thumb { background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; }
   .rail::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 999px; }
@@ -658,10 +668,34 @@ function renderProposals() {
     body.appendChild(btn);
     card.appendChild(body); rail.appendChild(card);
   });
-  s.appendChild(rail);
-  s.appendChild(el('div', 'rail-hint', '← scroll for more →'));
+  const wrap = el('div', 'rail-wrap');
+  const prev = el('button', 'rail-btn prev'); prev.type = 'button'; prev.setAttribute('aria-label', 'Scroll left'); prev.textContent = '‹';
+  const next = el('button', 'rail-btn next'); next.type = 'button'; next.setAttribute('aria-label', 'Scroll right'); next.textContent = '›';
+  wrap.appendChild(prev); wrap.appendChild(rail); wrap.appendChild(next);
+  s.appendChild(wrap);
+  s.appendChild(el('div', 'rail-hint', 'Swipe, use the ‹ › arrows, or Shift + scroll to browse'));
   const anchor = document.getElementById('projects');
   if (anchor) anchor.after(s); else document.getElementById('main').appendChild(s);
+
+  // Arrow navigation
+  const step = () => Math.max(280, Math.round(rail.clientWidth * 0.8));
+  prev.addEventListener('click', () => rail.scrollBy({ left: -step() }));
+  next.addEventListener('click', () => rail.scrollBy({ left: step() }));
+  const updateArrows = () => {
+    prev.disabled = rail.scrollLeft <= 4;
+    next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+  };
+  rail.addEventListener('scroll', updateArrows, { passive: true });
+  window.addEventListener('resize', updateArrows); setTimeout(updateArrows, 120);
+
+  // Vertical wheel scrolls the PAGE (prevents Chrome from hijacking it into horizontal rail scroll).
+  // Horizontal intent (trackpad swipe / Shift+wheel) still scrolls the rail.
+  rail.addEventListener('wheel', (e) => {
+    if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    window.scrollBy(0, e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY);
+  }, { passive: false });
+
   new IntersectionObserver((en, o) => en.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } }), { threshold: .08 }).observe(s);
 }
 
