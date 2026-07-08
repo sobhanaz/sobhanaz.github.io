@@ -623,10 +623,12 @@ const PROPOSALS = [
     note: "Initial project brief and configuration for a brand / digital build." }
 ];
 
-/* Fill these after creating your Google Form (see PROPOSAL-SETUP.md). Until then, the button falls back to email. */
 const NDA_CONFIG = {
-  action: "",   // e.g. "https://docs.google.com/forms/d/e/XXXX/formResponse"
-  entries: { name: "", email: "", company: "", proposal: "", signature: "", agree: "" }, // e.g. name: "entry.123456"
+  // ACTIVE: signatures are emailed to this inbox via FormSubmit (needs a one-time activation click — see PROPOSAL-SETUP.md).
+  formsubmitEmail: "sobhanazimzadeh@gmail.com",
+  // OPTIONAL override: fill these to use a Google Form → Sheet instead (takes priority if set). See PROPOSAL-SETUP.md.
+  action: "",
+  entries: { name: "", email: "", company: "", proposal: "", signature: "", agree: "" },
   fallbackEmail: "sobhanazimzadeh@gmail.com"
 };
 
@@ -693,7 +695,16 @@ document.getElementById('nda-form').addEventListener('submit', e => {
   const done = () => { document.getElementById('nda-form-wrap').style.display = 'none';
     document.getElementById('nda-done').style.display = ''; btn.disabled = false; btn.textContent = 'Sign & request full sample'; };
 
+  const mailtoFallback = () => {
+    const body = encodeURIComponent(
+      'NDA — full sample request\n\nProposal: ' + data.proposal + '\nName: ' + data.name + '\nEmail: ' + data.email +
+      '\nCompany: ' + data.company + '\nSignature: ' + data.signature + '\nAgreed to confidentiality: Yes\nDate: ' + data.date);
+    window.location.href = 'mailto:' + NDA_CONFIG.fallbackEmail + '?subject=' +
+      encodeURIComponent('NDA request — ' + data.proposal) + '&body=' + body;
+  };
+
   if (NDA_CONFIG.action && NDA_CONFIG.entries.name) {
+    // Google Form → Sheet
     const f = document.createElement('form');
     f.action = NDA_CONFIG.action; f.method = 'POST'; f.target = 'nda_sink'; f.style.display = 'none';
     const add = (k, v) => { if (!k) return; const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v || ''; f.appendChild(i); };
@@ -701,13 +712,19 @@ document.getElementById('nda-form').addEventListener('submit', e => {
     add(NDA_CONFIG.entries.company, data.company); add(NDA_CONFIG.entries.proposal, data.proposal);
     add(NDA_CONFIG.entries.signature, data.signature); add(NDA_CONFIG.entries.agree, data.agree);
     document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 900);
+  } else if (NDA_CONFIG.formsubmitEmail) {
+    // FormSubmit → your email inbox
+    fetch('https://formsubmit.co/ajax/' + NDA_CONFIG.formsubmitEmail, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'NDA signed — ' + data.proposal, _template: 'table', _captcha: 'false',
+        Proposal: data.proposal, Name: data.name, Email: data.email,
+        Company: data.company || '—', Signature: data.signature, Agreed: 'Yes — confidentiality', Date: data.date
+      })
+    }).then(() => done()).catch(() => { mailtoFallback(); done(); });
   } else {
-    const body = encodeURIComponent(
-      'NDA — full sample request\n\nProposal: ' + data.proposal + '\nName: ' + data.name + '\nEmail: ' + data.email +
-      '\nCompany: ' + data.company + '\nSignature: ' + data.signature + '\nAgreed to confidentiality: Yes\nDate: ' + data.date);
-    window.location.href = 'mailto:' + NDA_CONFIG.fallbackEmail + '?subject=' +
-      encodeURIComponent('NDA request — ' + data.proposal) + '&body=' + body;
-    setTimeout(done, 400);
+    mailtoFallback(); setTimeout(done, 400);
   }
 });
 
