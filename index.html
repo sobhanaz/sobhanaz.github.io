@@ -713,16 +713,14 @@ document.getElementById('nda-form').addEventListener('submit', e => {
     add(NDA_CONFIG.entries.signature, data.signature); add(NDA_CONFIG.entries.agree, data.agree);
     document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 900);
   } else if (NDA_CONFIG.formsubmitEmail) {
-    // FormSubmit → your email inbox
-    fetch('https://formsubmit.co/ajax/' + NDA_CONFIG.formsubmitEmail, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: 'NDA signed — ' + data.proposal, _template: 'table', _captcha: 'false',
-        Proposal: data.proposal, Name: data.name, Email: data.email,
-        Company: data.company || '—', Signature: data.signature, Agreed: 'Yes — confidentiality', Date: data.date
-      })
-    }).then(() => done()).catch(() => { mailtoFallback(); done(); });
+    // FormSubmit → your email inbox (browser-native form POST to a hidden iframe; passes Cloudflare)
+    const f = document.createElement('form');
+    f.action = 'https://formsubmit.co/' + NDA_CONFIG.formsubmitEmail; f.method = 'POST'; f.target = 'nda_sink'; f.style.display = 'none';
+    const add = (k, v) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = (v == null ? '' : v); f.appendChild(i); };
+    add('_subject', 'NDA signed — ' + data.proposal); add('_captcha', 'false'); add('_template', 'table');
+    add('Proposal', data.proposal); add('Name', data.name); add('Email', data.email);
+    add('Company', data.company || '—'); add('Signature', data.signature); add('Agreed', 'Yes — confidentiality'); add('Date', data.date);
+    document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 1200);
   } else {
     mailtoFallback(); setTimeout(done, 400);
   }
