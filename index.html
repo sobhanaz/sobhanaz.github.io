@@ -165,12 +165,64 @@
   }
   @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } .proj.feat { grid-column: span 1; } .hero { padding-top: 118px; } }
 
+  /* ---------- Proposals rail ---------- */
+  .prop-lead { color: var(--text-dim); font-size: 15px; margin: -8px 0 18px; max-width: 720px; }
+  .rail { display: flex; gap: 16px; overflow-x: auto; padding: 6px 4px 18px; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+  .rail::-webkit-scrollbar { height: 8px; }
+  .rail::-webkit-scrollbar-thumb { background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; }
+  .rail::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 999px; }
+  .pcard { scroll-snap-align: start; flex: 0 0 300px; max-width: 300px; display: flex; flex-direction: column;
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2)); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .25s, transform .25s, box-shadow .25s; }
+  .pcard:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); transform: translateY(-4px); box-shadow: 0 22px 50px -26px rgba(0,0,0,.85); }
+  .pcard .thumb { position: relative; aspect-ratio: 360/509; overflow: hidden; background: #0d0d16; }
+  .pcard .thumb img { width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+  .pcard .thumb .lock { position: absolute; top: 10px; right: 10px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #0a0a12;
+    background: linear-gradient(90deg, var(--accent2), var(--accent)); padding: 4px 10px; border-radius: 999px; }
+  .pcard .pbody { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
+  .pcard h3 { font-family: var(--display); font-size: 16px; font-weight: 600; }
+  .pcard .kind { color: var(--accent2); font-size: 12.5px; font-weight: 600; margin-top: 3px; }
+  .pcard .pnote { color: var(--text-dim); font-size: 13.5px; margin-top: 10px; flex: 1; }
+  .pcard .pmeta { color: var(--text-dim); font-size: 12px; margin-top: 10px; }
+  .req { margin-top: 14px; width: 100%; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--text); font: 600 13.5px var(--font); padding: 10px; border-radius: 10px; cursor: pointer; transition: background .2s, transform .15s; }
+  .req:hover { background: color-mix(in srgb, var(--accent) 32%, transparent); transform: translateY(-1px); }
+  .rail-hint { color: var(--text-dim); font-size: 12.5px; margin-top: 4px; }
+
+  /* ---------- NDA modal ---------- */
+  #nda { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px;
+    background: rgba(4,4,10,.72); backdrop-filter: blur(6px); }
+  #nda.open { display: flex; }
+  .nda-box { width: 100%; max-width: 460px; max-height: 92vh; overflow-y: auto; background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    border: 1px solid var(--border); border-radius: 18px; padding: 26px; position: relative; animation: rise .4s cubic-bezier(.2,.8,.2,1) both; }
+  .nda-box h3 { font-family: var(--display); font-size: 20px; font-weight: 600; }
+  .nda-box .sub { color: var(--text-dim); font-size: 13.5px; margin-top: 8px; }
+  .nda-box .forwhat { color: var(--accent2); font-size: 13px; font-weight: 600; margin-top: 10px; }
+  .nda-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer; line-height: 1; }
+  .nda-close:hover { color: var(--text); }
+  .field { margin-top: 14px; }
+  .field label { display: block; font-size: 12.5px; color: var(--text-dim); margin-bottom: 5px; }
+  .field input[type=text], .field input[type=email] { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--border);
+    background: #0c0c15; color: var(--text); font: 400 14px var(--font); }
+  .field input:focus { outline: none; border-color: var(--accent); }
+  .field.sig input { font-family: 'Space Grotesk', cursive; font-size: 17px; }
+  .agree { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: 13px; color: var(--text); }
+  .agree input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent); flex: none; }
+  .nda-submit { margin-top: 18px; width: 100%; border: none; border-radius: 11px; padding: 13px; cursor: pointer;
+    font: 700 15px var(--font); color: #fff; background: linear-gradient(100deg, var(--accent), var(--accent2)); transition: transform .15s, box-shadow .2s; }
+  .nda-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -10px var(--accent); }
+  .nda-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .privacy { color: var(--text-dim); font-size: 11.5px; margin-top: 14px; line-height: 1.5; }
+  .nda-done { text-align: center; padding: 14px 4px; }
+  .nda-done .ok { font-size: 40px; }
+  .nda-done h3 { margin-top: 8px; }
+  @media (max-width: 640px) { .pcard { flex-basis: 260px; } }
+
   /* ---------- Print / PDF (clean A4) ---------- */
   @media print {
     @page { size: A4; margin: 13mm; }
     :root { --bg:#fff; --bg-2:#fff; --bg-card:#fff; --bg-card-2:#fff; --text:#14141f; --text-dim:#555; --border:#dcdce6; }
     body { background:#fff !important; overflow: visible; }
-    #space, .orbs, .grain, nav, #prog, .cta-row { display:none !important; }
+    #space, .orbs, .grain, nav, #prog, .cta-row, #proposals, #nda { display:none !important; }
     .wrap { max-width: 100%; padding: 0; }
     .hero { padding: 0 0 10px; }
     .eyebrow { background:none; border-color:#ccc; color:#5a2bd0; }
@@ -199,6 +251,7 @@
   <div class="links">
     <a href="#experience">Experience</a>
     <a href="#projects">Projects</a>
+    <a href="#proposals">Proposals</a>
     <a href="#skills">Skills</a>
     <a href="https://github.com/sobhanaz" target="_blank" rel="noopener">GitHub</a>
     <a class="cta" href="./Sobhan-Azimzadeh-CV.pdf" download>Download CV</a>
@@ -221,6 +274,34 @@
   <main id="main"></main>
   <footer class="reveal">Designed &amp; built by Sobhan Azimzadeh · <a href="https://github.com/sobhanaz" target="_blank" rel="noopener">github.com/sobhanaz</a></footer>
 </div>
+
+<!-- NDA request modal -->
+<div id="nda" role="dialog" aria-modal="true" aria-labelledby="nda-title">
+  <div class="nda-box">
+    <button class="nda-close" id="nda-close" aria-label="Close">×</button>
+    <div id="nda-form-wrap">
+      <h3 id="nda-title">Request the full sample</h3>
+      <p class="sub">Full proposals are confidential. Sign this short NDA and I'll email you the complete watermarked sample.</p>
+      <p class="forwhat" id="nda-for"></p>
+      <form id="nda-form" novalidate>
+        <div class="field"><label>Full name *</label><input type="text" id="f-name" autocomplete="name" required></div>
+        <div class="field"><label>Email *</label><input type="email" id="f-email" autocomplete="email" required></div>
+        <div class="field"><label>Company / Organization</label><input type="text" id="f-company" autocomplete="organization"></div>
+        <label class="agree"><input type="checkbox" id="f-agree" required><span>I agree to keep these materials confidential and not to copy, reproduce, or share them with anyone. *</span></label>
+        <div class="field sig"><label>Type your full name as signature *</label><input type="text" id="f-sig" required></div>
+        <button type="submit" class="nda-submit" id="nda-submit">Sign &amp; request full sample</button>
+        <p class="privacy">Your details are sent privately to Sobhan (via a Google form) only so he can send you the sample. They are not shared or published. A record of this signature is kept as agreement to the terms above.</p>
+      </form>
+    </div>
+    <div id="nda-done" class="nda-done" style="display:none">
+      <div class="ok">✅</div>
+      <h3>Thank you — signed.</h3>
+      <p class="sub">Sobhan will email your requested sample shortly. You can close this window.</p>
+      <button class="nda-submit" id="nda-done-close" style="margin-top:18px">Close</button>
+    </div>
+  </div>
+</div>
+<iframe name="nda_sink" id="nda_sink" style="display:none" title="hidden"></iframe>
 
 <script>
 /* ===== CV DATA — mirrors sobhan-cv.json (edit the JSON, then re-sync this block) ===== */
@@ -523,7 +604,115 @@ function initTilt() {
   resize(); tick();
 })();
 
+/* ================= PROPOSALS + NDA GATE ================= */
+/* Anonymized, watermarked teasers. Full proposals are NOT hosted here — sent manually after signature. */
+const PROPOSALS = [
+  { img: "assets/proposals/negahban.png",  title: "Smart Security & Surveillance", kind: "B2B software platform", pages: 38,
+    note: "AI face-recognition, indoor guard tracking (RTLS) and access control — with business-model canvas, phased timeline and tiered pricing strategy." },
+  { img: "assets/proposals/saxtiran.png",  title: "Construction & Real-Estate Platform", kind: "Product & business proposal", pages: 111,
+    note: "End-to-end platform proposal: system architecture, virtual-tour experience, go-to-market and revenue model." },
+  { img: "assets/proposals/helal.png",     title: "Healthcare Platform", kind: "Product & business proposal", pages: 94,
+    note: "Digital health platform — market & needs analysis, feature set, monetization and rollout plan." },
+  { img: "assets/proposals/persicure.png", title: "Telemedicine & Digital Health", kind: "Product proposal", pages: 50,
+    note: "Telehealth concept — user journeys, tech stack and a phased delivery roadmap." },
+  { img: "assets/proposals/westoria.png",  title: "Tourism & Hospitality", kind: "Brand & platform proposal",
+    note: "Experience-led brand and platform proposal — positioning, identity and business model." },
+  { img: "assets/proposals/plankton.png",  title: "Specialty Coffee Roastery", kind: "Brand proposal",
+    note: "Brand identity and go-to-market proposal for a specialty coffee roastery." },
+  { img: "assets/proposals/foromandi.png", title: "Brand & Digital Project", kind: "Client brief & configuration",
+    note: "Initial project brief and configuration for a brand / digital build." }
+];
+
+/* Fill these after creating your Google Form (see PROPOSAL-SETUP.md). Until then, the button falls back to email. */
+const NDA_CONFIG = {
+  action: "",   // e.g. "https://docs.google.com/forms/d/e/XXXX/formResponse"
+  entries: { name: "", email: "", company: "", proposal: "", signature: "", agree: "" }, // e.g. name: "entry.123456"
+  fallbackEmail: "sobhanazimzadeh@gmail.com"
+};
+
+function renderProposals() {
+  const s = el('section', 'reveal'); s.id = 'proposals';
+  const h = el('div', 'sec-head'); h.appendChild(el('h2', null, 'Proposals &amp; Case Studies')); h.appendChild(el('div', 'rule'));
+  s.appendChild(h);
+  s.appendChild(el('p', 'prop-lead', 'Strategy-driven B2B proposals (40–110 pages each) — business analysis, market research, design and pricing strategy. Previews below are redacted &amp; watermarked; sign a quick NDA to get the full sample.'));
+  const rail = el('div', 'rail');
+  PROPOSALS.forEach(p => {
+    const card = el('div', 'pcard');
+    const thumb = el('div', 'thumb');
+    const img = el('img'); img.src = p.img; img.alt = p.title + ' proposal (redacted preview)'; img.loading = 'lazy';
+    thumb.appendChild(img); thumb.appendChild(el('span', 'lock', '🔒 NDA'));
+    card.appendChild(thumb);
+    const body = el('div', 'pbody');
+    body.appendChild(el('h3', null, esc(p.title)));
+    body.appendChild(el('div', 'kind', esc(p.kind)));
+    body.appendChild(el('p', 'pnote', esc(p.note)));
+    if (p.pages) body.appendChild(el('div', 'pmeta', '📄 ' + p.pages + '-page proposal'));
+    const btn = el('button', 'req', 'Request full sample →');
+    btn.addEventListener('click', () => openNda(p.title));
+    body.appendChild(btn);
+    card.appendChild(body); rail.appendChild(card);
+  });
+  s.appendChild(rail);
+  s.appendChild(el('div', 'rail-hint', '← scroll for more →'));
+  const anchor = document.getElementById('projects');
+  if (anchor) anchor.after(s); else document.getElementById('main').appendChild(s);
+  new IntersectionObserver((en, o) => en.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } }), { threshold: .08 }).observe(s);
+}
+
+/* ---- modal ---- */
+const nda = document.getElementById('nda');
+function openNda(title) {
+  document.getElementById('nda-for').textContent = 'Requesting: ' + title;
+  document.getElementById('nda-form-wrap').style.display = '';
+  document.getElementById('nda-done').style.display = 'none';
+  document.getElementById('nda-form').reset();
+  nda.dataset.proposal = title;
+  nda.classList.add('open');
+  setTimeout(() => document.getElementById('f-name').focus(), 60);
+}
+function closeNda() { nda.classList.remove('open'); }
+document.getElementById('nda-close').addEventListener('click', closeNda);
+document.getElementById('nda-done-close').addEventListener('click', closeNda);
+nda.addEventListener('click', e => { if (e.target === nda) closeNda(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNda(); });
+
+document.getElementById('nda-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  const sig = document.getElementById('f-sig').value.trim();
+  const agree = document.getElementById('f-agree').checked;
+  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !agree || !sig) {
+    alert('Please fill your name, a valid email, sign, and tick the confidentiality box.'); return;
+  }
+  const data = { name, email, company, signature: sig, agree: 'Agreed',
+    proposal: nda.dataset.proposal || '', date: new Date().toISOString().slice(0, 10) };
+  const btn = document.getElementById('nda-submit'); btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const done = () => { document.getElementById('nda-form-wrap').style.display = 'none';
+    document.getElementById('nda-done').style.display = ''; btn.disabled = false; btn.textContent = 'Sign & request full sample'; };
+
+  if (NDA_CONFIG.action && NDA_CONFIG.entries.name) {
+    const f = document.createElement('form');
+    f.action = NDA_CONFIG.action; f.method = 'POST'; f.target = 'nda_sink'; f.style.display = 'none';
+    const add = (k, v) => { if (!k) return; const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v || ''; f.appendChild(i); };
+    add(NDA_CONFIG.entries.name, data.name); add(NDA_CONFIG.entries.email, data.email);
+    add(NDA_CONFIG.entries.company, data.company); add(NDA_CONFIG.entries.proposal, data.proposal);
+    add(NDA_CONFIG.entries.signature, data.signature); add(NDA_CONFIG.entries.agree, data.agree);
+    document.body.appendChild(f); f.submit(); setTimeout(() => { f.remove(); done(); }, 900);
+  } else {
+    const body = encodeURIComponent(
+      'NDA — full sample request\n\nProposal: ' + data.proposal + '\nName: ' + data.name + '\nEmail: ' + data.email +
+      '\nCompany: ' + data.company + '\nSignature: ' + data.signature + '\nAgreed to confidentiality: Yes\nDate: ' + data.date);
+    window.location.href = 'mailto:' + NDA_CONFIG.fallbackEmail + '?subject=' +
+      encodeURIComponent('NDA request — ' + data.proposal) + '&body=' + body;
+    setTimeout(done, 400);
+  }
+});
+
 render(CV_DATA);
+renderProposals();
 </script>
 </body>
 </html>
